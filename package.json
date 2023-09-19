@@ -1,0 +1,38 @@
+{
+  "type": "module",
+  "scripts": {
+    "lint": "eslint src/**/*.ts",
+    "prettier": "prettier --check src/**/*.ts",
+    "test": "vitest",
+    "dev": "tsx watch src",
+    "deploy": "tsx src/deploy.ts",
+    "build": "tsc --noEmit && tsup"
+  },
+  "devDependencies": {
+    "@types/node-schedule": "^2.1.0",
+    "@typescript-eslint/eslint-plugin": "^6.7.0",
+    "@typescript-eslint/parser": "^6.7.0",
+    "eslint": "^8.49.0",
+    "eslint-config-prettier": "^9.0.0",
+    "prettier": "3.0.3",
+    "tsup": "^7.2.0",
+    "tsx": "^3.12.10",
+    "typescript": "^5.2.2",
+    "vitest": "^0.34.4"
+  },
+  "dependencies": {
+    "@discordjs/opus": "^0.9.0",
+    "@discordjs/voice": "^0.16.0",
+    "axios": "^1.5.0",
+    "dedent": "^1.5.1",
+    "discord.js": "^14.13.0",
+    "dotenv": "^16.1.4",
+    "libsodium-wrappers": "^0.7.13",
+    "node-schedule": "^2.1.1",
+    "winston": "^3.9.0",
+    "winston-daily-rotate-file": "^4.7.1",
+    "ytdl-core": "^4.11.5",
+    "ytpl": "^2.3.0",
+    "ytsr": "^3.8.2"
+  }
+}
