@@ -10,9 +10,9 @@ export const timestamps = <K extends "D" | "d" | "F" | "f" | "R" | "T" | "t" | u
     ? `<t:${number}>`
     : `<t:${number}:${K}>`;
 
-export const codeblocks = (text: string, lang?: string) => {
+export const codeblocks = (text: string, lang = "") => {
   if (text.includes("\n")) {
-    return lang ? (`\`\`\`${lang}\n${text}\`\`\`` as const) : (`\`\`\`\n${text}\`\`\`` as const);
+    return `\`\`\`${lang}\n${text}\`\`\`` as const;
   } else {
     return `\`${text}\`` as const;
   }

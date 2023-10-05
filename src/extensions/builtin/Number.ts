@@ -7,7 +7,9 @@ declare global {
 }
 
 Number.prototype.between = function (min, max) {
-  if (min > max) [min, max] = [max, min];
+  if (min > max) {
+    [min, max] = [max, min];
+  }
 
   return (this as number) > min && (this as number) < max;
 };

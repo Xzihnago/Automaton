@@ -4,6 +4,8 @@ export default new SlashCommandBuilder()
   .setName("test")
   .setDescription("Debug: Test")
 
+  .addSubcommand((subcommand) => subcommand.setName("err").setDescription("Debug: handle Result<(), Err>"))
+
   .addSubcommand((subcommand) => subcommand.setName("exception").setDescription("Debug: throw error"))
 
   .addSubcommand((subcommand) => subcommand.setName("rejection").setDescription("Debug: reject error"))

@@ -1,5 +1,10 @@
 const chatInputCommand: TChatInputCommand = async (interaction) => {
   switch (interaction.options.getSubcommand(true)) {
+    case "err":
+      await interaction.autoReply("Test err is designed to Rust, not available in Node.js");
+
+      return;
+
     case "exception":
       await interaction.autoReply("Debug: Test exception handle");
 

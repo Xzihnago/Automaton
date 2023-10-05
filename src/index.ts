@@ -1,9 +1,14 @@
 import "dotenv/config";
+import dedent from "dedent";
 import { Client, GatewayIntentBits } from "discord.js";
 
-logger.debug(`[Process] Env\n  DEBUG=${process.env.DEBUG}\n  CACHE=${process.env.CACHE}`);
-
 import "extensions";
+
+logger.debug(dedent`
+  [Process] Load .env
+  ${makeForm("Keys", ["DISCORD_TOKEN", "DEBUG", "CACHE"])}
+`);
+
 import "process-event";
 import "tasks";
 import registerEventHandler from "events-client";
@@ -22,4 +27,4 @@ const client = new Client({
 registerEventHandler(client);
 
 logger.info("[Client] Login");
-await client.login(process.env.DISCORD_API_TOKEN);
+await client.login(process.env.DISCORD_TOKEN);

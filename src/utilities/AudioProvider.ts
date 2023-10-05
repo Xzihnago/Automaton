@@ -6,7 +6,9 @@ import ytpl from "ytpl";
 import ytsr, { type Video } from "ytsr";
 
 // Make cache folder if cache or debug is enabled
-if (process.env.CACHE ?? process.env.DEBUG) await mkdir("cache", { recursive: true });
+if (process.env.CACHE ?? process.env.DEBUG) {
+  await mkdir("cache", { recursive: true });
+}
 
 const isPlayable = (url: string) => ytdl.validateURL(url);
 const hasPlaylist = (url: string) => ytpl.validateID(url);

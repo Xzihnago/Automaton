@@ -1,7 +1,7 @@
 import type { Client, ClientEvents } from "discord.js";
 import ready from "./ready";
-import message from "./message";
-import interactionCreate from "./interaction";
+import messageCreate from "./message-create";
+import interactionCreate from "./interaction-create";
 
 const eventHandlerWrapper = <K extends keyof ClientEvents>(
   event: K,
@@ -15,7 +15,7 @@ const eventHandlerWrapper = <K extends keyof ClientEvents>(
 ];
 
 const registerEventHandler = (client: Client) => {
-  const events = [ready, message, interactionCreate];
+  const events = [ready, messageCreate, interactionCreate];
 
   for (const event of events) {
     logger.info(`[Client] Register event handler -> ${event.event}`);

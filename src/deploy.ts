@@ -47,7 +47,7 @@ const putApplicationGuildCommands = async (clientId: string, guildId: string, bu
 };
 
 logger.info("[Deploy] Create REST interface");
-const rest = new REST().setToken(process.env.DISCORD_API_TOKEN ?? "");
+const rest = new REST().setToken(process.env.DISCORD_TOKEN ?? "");
 
 const user = (await rest.get(Routes.user())) as APIUser;
 logger.info(`[Deploy] Get application client(${user.id})`);
