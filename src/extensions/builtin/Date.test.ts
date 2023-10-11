@@ -33,6 +33,14 @@ describe("Date", () => {
     ["2021-01-01", -12, new Date("2021-01-01T12:00:00.000Z")],
 
     // Custom parse
+    ["01-01 08:00", 0, new Date(Date.UTC(now.getFullYear(), 0, 1, 8))],
+    ["01-01 08:00", 1, new Date(Date.UTC(now.getFullYear(), 0, 1, 7))],
+    ["01-01 08:00", -1, new Date(Date.UTC(now.getFullYear(), 0, 1, 9))],
+    ["01-01 08:00", 8, new Date(Date.UTC(now.getFullYear(), 0, 1))],
+    ["01-01 08:00", -8, new Date(Date.UTC(now.getFullYear(), 0, 1, 16))],
+    ["01-01 08:00", 12, new Date(Date.UTC(now.getFullYear() - 1, 0, -1, 20))],
+    ["01-01 08:00", -12, new Date(Date.UTC(now.getFullYear(), 0, 1, 20))],
+
     ["00:00", 0, new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()))],
     ["08:00", 0, new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate(), 8))],
     ["08:00", 1, new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate(), 7))],
