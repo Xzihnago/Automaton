@@ -1,5 +1,5 @@
 import { Events } from "discord.js";
-import commands from "commands-chat";
+import commands from "commands/chat";
 
 const messageCreate: TClientEvents<Events.MessageCreate> = {
   once: false,

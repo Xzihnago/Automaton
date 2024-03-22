@@ -2,12 +2,12 @@ import { inspect } from "util";
 import {
   type AutocompleteInteraction,
   type ChatInputCommandInteraction,
+  type MessageComponentInteraction,
   ComponentType,
   Events,
   InteractionType,
-  type MessageComponentInteraction,
 } from "discord.js";
-import commands from "commands-slash";
+import commands from "commands/slash";
 
 const interactionCreate: TClientEvents<Events.InteractionCreate> = {
   once: false,

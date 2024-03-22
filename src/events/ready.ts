@@ -1,6 +1,6 @@
 import { Events } from "discord.js";
 import { GuildPlayer } from "utilities";
-import commands from "commands-slash";
+import commands from "commands/slash";
 
 const ready: TClientEvents<Events.ClientReady> = {
   once: true,
