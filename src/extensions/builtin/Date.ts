@@ -1,4 +1,5 @@
-export type {};
+import "./Number";
+
 declare global {
   interface Date {
     isValid: () => boolean;

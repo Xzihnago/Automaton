@@ -1,6 +1,4 @@
 import { assert, describe, test } from "vitest";
-
-import "./Number";
 import "./Date";
 
 describe("Date", () => {
