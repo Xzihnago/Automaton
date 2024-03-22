@@ -4,7 +4,6 @@
     "module": "ESNext",
     "moduleResolution": "node",
 
-    "rootDir": "src",
     "outDir": "build",
     "baseUrl": "src",
     "paths": {},
@@ -14,5 +13,5 @@
     "esModuleInterop": true,
     "exactOptionalPropertyTypes": true
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "eslint.config.js", "tsup.config.ts"]
 }
