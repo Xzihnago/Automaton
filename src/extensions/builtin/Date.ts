@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-magic-numbers */
 export type {};
 declare global {
   interface Date {
@@ -52,7 +51,7 @@ Date.parseTime = (raw: string, timezone = 0) => {
   }
 
   // Data
-  dateFull = ` ${dateFull.replace(" ", "  ")} `;
+  dateFull = ` ${dateFull.replace(/：/g, ":").replace(" ", "  ")} `;
   const tzs = timezone >= 0 ? `UTC+${timezone}` : `UTC${timezone}`;
   const now = new Date();
   now.setUTCMinutes(now.getUTCMinutes() - now.getTimezoneOffset());

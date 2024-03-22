@@ -1,5 +1,5 @@
 import { ChatInputCommandInteraction } from "discord.js";
-import commands from "commands-slash";
+import commands from "commands/slash";
 
 declare module "discord.js" {
   interface ChatInputCommandInteraction {

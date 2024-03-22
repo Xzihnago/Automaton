@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { assert, describe, test } from "vitest";
 
 import "./Number";
