@@ -6,12 +6,11 @@
 
     "outDir": "build",
     "baseUrl": "src",
-    "paths": {},
 
     "strict": true,
-    "skipLibCheck": true,
+    "exactOptionalPropertyTypes": true,
     "esModuleInterop": true,
-    "exactOptionalPropertyTypes": true
+    "skipLibCheck": true
   },
   "include": ["src/**/*", "eslint.config.js", "tsup.config.ts"]
 }
