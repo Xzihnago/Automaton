@@ -1,11 +1,11 @@
 import tseslint from "typescript-eslint";
-import eslintConfigPrettier from "eslint-config-prettier";
+import prettier from "eslint-config-prettier";
 
 export default tseslint.config(
   ...tseslint.configs.strictTypeChecked,
   ...tseslint.configs.stylisticTypeChecked,
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-  eslintConfigPrettier,
+  prettier,
   {
     rules: {
       "@typescript-eslint/restrict-template-expressions": [
