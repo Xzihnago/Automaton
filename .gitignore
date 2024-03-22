@@ -131,4 +131,5 @@ dist
 
 # User
 build
+caches
 configs

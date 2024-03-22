@@ -2,7 +2,7 @@
   "type": "module",
   "scripts": {
     "bump-dependencies": "pnpm up -L",
-    "lint": "eslint .",
+    "lint": "eslint src",
     "prettier": "prettier --check src/**/*.ts",
     "test": "vitest",
     "dev": "tsx watch src",
