@@ -5,9 +5,9 @@
     "lint": "eslint src",
     "prettier": "prettier -c src/**/*.ts",
     "test": "vitest",
-    "dev": "tsx watch src",
+    "build": "tsc --noEmit && tsup",
     "deploy": "tsx src/deploy",
-    "build": "tsc --noEmit && tsup"
+    "dev": "tsx watch src"
   },
   "devDependencies": {
     "@types/node-schedule": "^2.1.7",
