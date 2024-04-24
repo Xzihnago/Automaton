@@ -3,7 +3,7 @@ import { isDeepStrictEqual } from "util";
 declare global {
   interface Array<T> {
     remove: (item: T) => T | undefined;
-    awaitAll: () => Promise<T[]>;
+    awaitAll: () => Promise<Awaited<T>[]>;
   }
 }
 
@@ -15,6 +15,6 @@ Array.prototype.remove = function <T>(item: T): T | undefined {
   }
 };
 
-Array.prototype.awaitAll = function <T>(): Promise<T[]> {
+Array.prototype.awaitAll = function () {
   return Promise.all(this);
 };

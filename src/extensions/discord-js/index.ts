@@ -1,7 +1,8 @@
-import "./AudioPlayer";
-import "./BaseInteraction";
-import "./ChatInputCommandInteraction";
-import "./CommandInteraction";
+import "./Message";
 import "./Guild";
+import "./BaseInteraction";
+import "./CommandInteraction";
+import "./ChatInputCommandInteraction";
 import "./MessageComponentInteraction";
 import "./VoiceState";
+import "./AudioPlayer";
