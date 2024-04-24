@@ -13,7 +13,7 @@ const messageCreate: TClientEvents<Events.MessageCreate> = {
       .map((command) => {
         logger.debug(`[Client] Execute chat "${command.name}"`);
         try {
-          return command.callback(message) as Awaitable<void>;
+          return command.callback(message as never) as Awaitable<void>;
         } catch (error) {
           logger.error(
             `[Client] Execute chat "${command.name}"\n${inspect(error)}`,
