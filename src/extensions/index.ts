@@ -1,3 +1,2 @@
-import "./builtin";
-import "./global";
-import "./discord.js";
+import "./built-in";
+import "./discord-js";

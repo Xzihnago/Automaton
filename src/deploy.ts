@@ -1,21 +1,20 @@
-import "dotenv/config";
 import { inspect } from "util";
+import "dotenv/config";
 import {
   type APIUser,
-  REST,
-  Routes,
   type SlashCommandBuilder,
   type SlashCommandSubcommandsOnlyBuilder,
+  REST,
+  Routes,
 } from "discord.js";
 
 import "extensions";
-import builders from "commands-slash/builders";
-import builders443431129198886924 from "commands-slash/443431129198886924/builders";
-import builders558806955380965386 from "commands-slash/558806955380965386/builders";
+import builders from "commands/slash-builders";
 
 type TBuilders = Record<
   string,
-  Omit<SlashCommandBuilder, "addSubcommand" | "addSubcommandGroup"> | SlashCommandSubcommandsOnlyBuilder
+  | Omit<SlashCommandBuilder, "addSubcommand" | "addSubcommandGroup">
+  | SlashCommandSubcommandsOnlyBuilder
 >;
 
 const putApplicationCommands = async (clientId: string, builder: TBuilders) => {
@@ -23,7 +22,9 @@ const putApplicationCommands = async (clientId: string, builder: TBuilders) => {
   const route = Routes.applicationCommands(clientId);
   const body = Object.values(builder);
 
-  logger.info(`[Global] Put application commands ${inspect(body.map((v) => v.name))}`);
+  logger.info(
+    `[Global] Put application commands ${inspect(body.map((v) => v.name))}`,
+  );
   try {
     await rest.put(route, { body });
     logger.info(`[Global] Done in ${Date.now() - timeStart}ms`);
@@ -32,12 +33,18 @@ const putApplicationCommands = async (clientId: string, builder: TBuilders) => {
   }
 };
 
-const putApplicationGuildCommands = async (clientId: string, guildId: string, builder: TBuilders) => {
+const putApplicationGuildCommands = async (
+  clientId: string,
+  guildId: string,
+  builder: TBuilders,
+) => {
   const timeStart = Date.now();
   const route = Routes.applicationGuildCommands(clientId, guildId);
   const body = Object.values(builder);
 
-  logger.info(`[${guildId}] Put application guild commands ${inspect(body.map((v) => v.name))}`);
+  logger.info(
+    `[${guildId}] Put application guild commands ${inspect(body.map((v) => v.name))}`,
+  );
   try {
     await rest.put(route, { body });
     logger.info(`[${guildId}] Done in ${Date.now() - timeStart}ms`);
@@ -55,11 +62,15 @@ logger.info(`[Deploy] Get application client(${user.id})`);
 logger.info("[Deploy] Begin");
 const timeStart = Date.now();
 
-await putApplicationCommands(user.id, builders);
+await putApplicationCommands(user.id, builders.global);
 await putApplicationGuildCommands(user.id, "558806955380965386", {
-  ...builders558806955380965386,
-  ...builders443431129198886924,
+  ...builders.$558806955380965386,
+  ...builders.$443431129198886924,
 });
-await putApplicationGuildCommands(user.id, "443431129198886924", builders443431129198886924);
+await putApplicationGuildCommands(
+  user.id,
+  "443431129198886924",
+  builders.$443431129198886924,
+);
 
 logger.info(`[Deploy] End in ${Date.now() - timeStart}ms`);

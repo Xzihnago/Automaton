@@ -1,30 +1,21 @@
-import type { Client, ClientEvents } from "discord.js";
+import { inspect } from "util";
 import ready from "./ready";
 import messageCreate from "./message-create";
 import interactionCreate from "./interaction-create";
 
-const eventHandlerWrapper = <K extends keyof ClientEvents>(
-  event: K,
-  handler: TClientEventsHandler<K>,
-): [K, TClientEventsHandler<K>] => [
-  event,
-  async (...args: ClientEvents[K]) => {
-    logger.info(`[Client] Event<${event}>`);
-    await handler(...args);
-  },
-];
+const events = [ready, messageCreate, interactionCreate] as const;
 
-const registerEventHandler = (client: Client) => {
-  const events = [ready, messageCreate, interactionCreate];
+events.forEach((event) => {
+  const callback = event.callback;
+  event.callback = async (...args: Parameters<typeof callback>) => {
+    logger.info(`[Client] Event<${event.event}>`);
 
-  for (const event of events) {
-    logger.info(`[Client] Register event handler -> ${event.event}`);
-    if (event.once) {
-      client.once(...eventHandlerWrapper(event.event, event.handler as never));
-    } else {
-      client.on(...eventHandlerWrapper(event.event, event.handler as never));
+    try {
+      await callback(...(args as unknown as never[]));
+    } catch (error) {
+      logger.error(`[Client] Event<${event.event}>\n${inspect(error)}`);
     }
-  }
-};
+  };
+});
 
-export default registerEventHandler;
+export default events;

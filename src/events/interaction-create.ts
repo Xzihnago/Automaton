@@ -1,60 +1,67 @@
 import { inspect } from "util";
-import {
-  type AutocompleteInteraction,
-  type ChatInputCommandInteraction,
-  type MessageComponentInteraction,
-  ComponentType,
-  Events,
-  InteractionType,
-} from "discord.js";
-import commands from "commands/slash";
+import { Events, InteractionType, ComponentType } from "discord.js";
+import commands from "@/commands/slash";
 
 const interactionCreate: TClientEvents<Events.InteractionCreate> = {
   once: false,
   event: Events.InteractionCreate,
-  handler: async (interaction) => {
+  callback: async (interaction) => {
+    // Log interaction info
     const type = InteractionType[interaction.type];
     const user = interaction.user;
+    const infos = [`I<${type}>`, `U(${user.id}, ${user.username})`];
     if (interaction.inCachedGuild()) {
-      logger.info(`I<${type}>, U(${user.id}), G(${interaction.guildId}), C(${interaction.channelId})`);
-      logger.debug(`U("${user.displayName}"), G("${interaction.guild.name}"), C("${interaction.channel?.name}")`);
-    } else {
-      logger.info(`I<${type}>, U(${user.id})`);
-      logger.debug(`U("${user.displayName}")`);
+      infos.push(`G(${interaction.guildId}, ${interaction.guild.name})`);
+      infos.push(`C(${interaction.channelId}, ${interaction.channel?.name})`);
     }
+    logger.debug(`[Interaction] ${infos.join(", ")}`);
 
+    // Handle interaction
     if (interaction.isAutocomplete()) {
-      logger.info(`Autocomplete -> "${interaction.commandName}"`);
+      const commandName = interaction.commandName as keyof typeof commands;
+      const command = commands[commandName];
+      logger.info(`[Interaction] Autocomplete -> "${commandName}"`);
 
-      try {
-        const command = commands[interaction.commandName as keyof typeof commands];
-        if (command.autocomplete) {
-          await command.autocomplete(interaction as AutocompleteInteraction<"cached">);
+      if (command.autocomplete) {
+        try {
+          await command.autocomplete(interaction as never);
+        } catch (error) {
+          logger.error(
+            `[Interaction] ${commandName}.autocomplete\n${inspect(error)}`,
+          );
         }
-      } catch (error) {
-        logger.error(`Interaction error in "${interaction.commandName}.autocomplete"\n${inspect(error)}`);
       }
     } else if (interaction.isChatInputCommand()) {
-      logger.info(`ChatInputCommand -> "${interaction.commandName}"`);
+      const commandName = interaction.commandName as keyof typeof commands;
+      const command = commands[commandName];
+      logger.info(`[Interaction] ChatInputCommand -> "${commandName}"`);
 
       try {
-        const command = commands[interaction.commandName as keyof typeof commands];
-        await command.chatInputCommand(interaction as ChatInputCommandInteraction<"cached">);
+        await command.chatInputCommand(interaction as never);
       } catch (error) {
-        logger.error(`Interaction error in "${interaction.commandName}.chatInputCommand"\n${inspect(error)}`);
-        await interaction.autoReply(error as Error);
+        logger.error(
+          `[Interaction] ${commandName}.chatInputCommand\n${inspect(error)}`,
+        );
+        await interaction.tryReply(error as Error);
       }
     } else if (interaction.isMessageComponent()) {
-      logger.info(`MessageComponent<${ComponentType[interaction.componentType]}> -> "${interaction.customId}"`);
+      const commandName = interaction.customId.split(
+        ".",
+      )[0] as keyof typeof commands;
+      const command = commands[commandName];
+      logger.info(
+        `MessageComponent<${ComponentType[interaction.componentType]}> -> "${interaction.customId}"`,
+      );
 
-      try {
-        const command = commands[interaction.customId.split(".")[0] as keyof typeof commands];
-        if (command.messageComponent) {
-          await command.messageComponent(interaction as MessageComponentInteraction<"cached">);
+      if (command.messageComponent) {
+        try {
+          await command.messageComponent(interaction as never);
+        } catch (error) {
+          logger.error(
+            `[Interaction] ${commandName}.messageComponent"\n${inspect(error)}`,
+          );
+          await interaction.tryReply(error as Error);
         }
-      } catch (error) {
-        logger.error(`Interaction error in "${interaction.customId}.messageComponent"\n${inspect(error)}`);
-        await interaction.autoReply(error as Error);
       }
     }
   },

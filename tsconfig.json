@@ -6,6 +6,9 @@
 
     "outDir": "build",
     "baseUrl": "src",
+    "paths": {
+      "@/*": ["./*"]
+    },
 
     "strict": true,
     "exactOptionalPropertyTypes": true,

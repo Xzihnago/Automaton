@@ -1,19 +1,10 @@
-import "dotenv/config";
-import dedent from "dedent";
 import { Client, GatewayIntentBits } from "discord.js";
+import "@/extensions";
+import "@/process";
+import "@/tasks";
+import events from "@/events";
 
-import "extensions";
-
-logger.debug(dedent`
-  [Process] Load .env
-  ${makeForm("Keys", ["DISCORD_TOKEN", "DEBUG", "CACHE"])}
-`);
-
-import "process-event";
-import "tasks";
-import registerEventHandler from "events-client";
-
-logger.info("[Client] Create");
+logger.debug("[Client] Initialize");
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -24,7 +15,15 @@ const client = new Client({
   ],
 });
 
-registerEventHandler(client);
+events.forEach((event) => {
+  logger.debug(`[Client] Add event listener -> ${event.event}`);
 
-logger.info("[Client] Login");
+  if (event.once) {
+    client.once(event.event, event.callback as never);
+  } else {
+    client.on(event.event, event.callback as never);
+  }
+});
+
+logger.debug("[Client] Login");
 await client.login(process.env.DISCORD_TOKEN);
