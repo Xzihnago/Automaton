@@ -6,11 +6,9 @@ const messageLink: TChatCommand<true> = {
   name: "message-link",
   pattern: re,
   callback: async (message) => {
-    const links = message.content.match(re);
-    if (!links) return;
-
-    const embeds = await links
-      .map(async (url) => {
+    const embeds = await message.content
+      .match(re)
+      ?.map(async (url) => {
         const messageId = url.split("/").pop() ?? "";
         const msg =
           message.channel.messages.resolve(messageId) ??
@@ -35,7 +33,9 @@ const messageLink: TChatCommand<true> = {
       .awaitAll()
       .then((embeds) => embeds.flat().slice(0, 10));
 
-    await message.reply({ embeds });
+    if (embeds?.length) {
+      await message.reply({ embeds });
+    }
   },
 };
 
