@@ -4,10 +4,16 @@ import ytdl from "ytdl-core";
 import ytpl from "ytpl";
 import ytsr, { type Video } from "ytsr";
 
-const isPlayable = (url: string) => ytdl.validateURL(url);
-const hasPlaylist = (url: string) => ytpl.validateID(url);
+// Make cache folder if cache or debug is enabled
+if (process.env.CACHE ?? process.env.DEBUG) {
+  await mkdir("cache", { recursive: true });
+}
 
-const search = async (query: string): Promise<TAudioInfo[]> => {
+export const isPlayable = (url: string) => ytdl.validateURL(url);
+
+export const hasPlaylist = (url: string) => ytpl.validateID(url);
+
+export const search = async (query: string): Promise<TAudioInfo[]> => {
   logger.info(`[AudioProvider] Searching ("${query}")`);
 
   return (await ytsr(`"${query}"`, { limit: 10 })).items
@@ -29,10 +35,10 @@ const search = async (query: string): Promise<TAudioInfo[]> => {
     }));
 };
 
-const playlist = async (url: string): Promise<TAudioInfo[]> => {
+export const playlist = async (url: string): Promise<TAudioInfo[]> => {
   logger.info(`[AudioProvider] Fetch playlist ("${url}")`);
 
-  return (await ytpl(url)).items.map((item) => ({
+  return (await ytpl(url, { limit: Infinity })).items.map((item) => ({
     url: item.url,
     title: item.title,
     duration: Number(item.durationSec),
@@ -49,7 +55,7 @@ const playlist = async (url: string): Promise<TAudioInfo[]> => {
   }));
 };
 
-const info = async (url: string): Promise<TAudioInfo> => {
+export const info = async (url: string): Promise<TAudioInfo> => {
   logger.info(`[AudioProvider] Fetch video info (${url})`);
 
   const vInfo = await ytdl.getInfo(url);
@@ -73,7 +79,7 @@ const info = async (url: string): Promise<TAudioInfo> => {
   };
 };
 
-const stream = async (url: string) => {
+export const stream = async (url: string) => {
   const options: ytdl.downloadOptions = {
     liveBuffer: 1 << 30,
     highWaterMark: 1 << 30,
@@ -109,19 +115,3 @@ const stream = async (url: string) => {
 
   return ytdl.downloadFromInfo(vInfo, options);
 };
-
-const AudioProvider = {
-  isPlayable,
-  hasPlaylist,
-  search,
-  playlist,
-  info,
-  stream,
-};
-
-// Make cache folder if cache or debug is enabled
-if (process.env.CACHE ?? process.env.DEBUG) {
-  await mkdir("cache", { recursive: true });
-}
-
-export default AudioProvider;
