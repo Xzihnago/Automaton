@@ -1,4 +1,3 @@
-import { inspect } from "util";
 import dedent from "dedent";
 import { inlineCode } from "discord.js";
 
@@ -39,7 +38,7 @@ const chatInputCommand: TChatInputCommand = async (interaction) => {
         audioIndex: guild.player.queue.index,
         audioQueue: guild.player.queue.items.map((audio) => audio.title),
       }));
-      logger.debug(inspect(storage, { depth: null }));
+      logger.debug(storage.inspect(undefined, null));
 
       await interaction.tryReply("Debug: dump storage to console");
       return;

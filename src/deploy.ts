@@ -1,11 +1,10 @@
-import { inspect } from "util";
 import "dotenv/config";
 import {
+  REST,
+  Routes,
   type APIUser,
   type SlashCommandBuilder,
   type SlashCommandSubcommandsOnlyBuilder,
-  REST,
-  Routes,
 } from "discord.js";
 
 import "extensions";
@@ -23,7 +22,7 @@ const putApplicationCommands = async (clientId: string, builder: TBuilders) => {
   const body = Object.values(builder);
 
   logger.info(
-    `[Global] Put application commands ${inspect(body.map((v) => v.name))}`,
+    `[Global] Put application commands ${body.map((v) => v.name).inspect()}`,
   );
   try {
     await rest.put(route, { body });
@@ -43,7 +42,7 @@ const putApplicationGuildCommands = async (
   const body = Object.values(builder);
 
   logger.info(
-    `[${guildId}] Put application guild commands ${inspect(body.map((v) => v.name))}`,
+    `[${guildId}] Put application guild commands ${body.map((v) => v.name).inspect()}`,
   );
   try {
     await rest.put(route, { body });

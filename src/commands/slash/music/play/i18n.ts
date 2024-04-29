@@ -16,7 +16,11 @@ const i18n = i18nWrapper({
     [Locale.EnglishUS]: "Playlist discovered",
     [Locale.ChineseTW]: "發現播放清單",
   },
-  AudioAdded: {
+  Total: {
+    [Locale.EnglishUS]: "Total",
+    [Locale.ChineseTW]: "共",
+  },
+  Added: {
     [Locale.EnglishUS]: "Added",
     [Locale.ChineseTW]: "已加入",
   },

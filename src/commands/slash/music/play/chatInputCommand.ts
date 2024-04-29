@@ -1,6 +1,6 @@
 import dedent from "dedent";
 import { ComponentType, EmbedBuilder, inlineCode } from "discord.js";
-import { AudioProvider } from "utilities";
+import { ytdl } from "@/utils";
 import actionrow from "./actionrow";
 import i18n from "./i18n";
 
@@ -15,10 +15,10 @@ const chatInputCommand: TChatInputCommand<"cached"> = async (interaction) => {
   const url = interaction.options.getString("url", true);
   const player = interaction.guild.player;
 
-  if (AudioProvider.hasPlaylist(url)) {
-    const playlist = await AudioProvider.playlist(url);
+  if (ytdl.hasPlaylist(url)) {
+    const playlist = await ytdl.playlist(url);
 
-    if (!AudioProvider.isPlayable(url)) {
+    if (!ytdl.isPlayable(url)) {
       await player.queue.add(playlist);
       await interaction.invoke("panel");
       await player.resume();
@@ -40,7 +40,7 @@ const chatInputCommand: TChatInputCommand<"cached"> = async (interaction) => {
 
       switch (button.customId.split(".").pop()) {
         case "NO":
-          await player.queue.add(await AudioProvider.info(url));
+          await player.queue.add(await ytdl.info(url));
           break;
 
         case "YES":
@@ -56,7 +56,9 @@ const chatInputCommand: TChatInputCommand<"cached"> = async (interaction) => {
     const embed = new EmbedBuilder()
       .setColor(interaction.member.displayColor)
       .setTitle(i18n.PlaylistDiscovered[interaction.locale])
-      .setFooter({ text: `total ${playlist.length} (max 100)` });
+      .setFooter({
+        text: `${i18n.Total[interaction.locale]} ${playlist.length}`,
+      });
 
     playlist.slice(0, 10).forEach((ainfo, index) =>
       embed.addFields({
@@ -77,17 +79,17 @@ const chatInputCommand: TChatInputCommand<"cached"> = async (interaction) => {
       embeds: [embed],
       components: actionrow.confirm(interaction.getLocale()),
     });
-  } else if (AudioProvider.isPlayable(url)) {
-    const ainfo = await AudioProvider.info(url);
+  } else if (ytdl.isPlayable(url)) {
+    const ainfo = await ytdl.info(url);
     await player.queue.add(ainfo);
     await interaction.tryReply(
-      `${i18n.AudioAdded[interaction.locale]} ${inlineCode(ainfo.title)} ${i18n.ToQueue[interaction.locale]}`,
+      `${i18n.Added[interaction.locale]} ${inlineCode(ainfo.title)} ${i18n.ToQueue[interaction.locale]}`,
     );
 
     await interaction.invoke("panel");
     await player.resume();
   } else {
-    const sInfo = await AudioProvider.search(url);
+    const sInfo = await ytdl.search(url);
 
     const collector = interaction.channel
       ?.createMessageComponentCollector({
