@@ -3,15 +3,11 @@ import { EmbedBuilder, inlineCode, type Guild, type Message } from "discord.js";
 import i18n from "./i18n";
 
 export class PanelManager {
-  public readonly guild: Guild;
-
   private _mode: PanelMode;
   private _task: NodeJS.Timeout | null;
   public message: Message | null;
 
-  public constructor(guild: Guild) {
-    this.guild = guild;
-
+  constructor(public readonly guild: Guild) {
     this._mode = PanelMode.Audio;
     this._task = null;
     this.message = null;

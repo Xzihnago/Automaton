@@ -8,7 +8,7 @@ import {
   type AudioPlayer,
   type AudioResource,
 } from "@discordjs/voice";
-import AudioProvider from "utilities/AudioProvider";
+import { ytdl } from "@/utils";
 import { QueueManager, QueueMode } from "./QueueManager";
 import { PanelManager, PanelMode } from "./PanelManager";
 
@@ -16,17 +16,15 @@ export class GuildPlayer {
   public readonly QueueMode = QueueMode;
   public readonly PanelMode = PanelMode;
 
-  public readonly guild: Guild;
   public readonly player: AudioPlayer;
   public readonly queue: QueueManager;
   public readonly panel: PanelManager;
 
   public resource: AudioResource | null;
 
-  public constructor(guild: Guild) {
+  constructor(public readonly guild: Guild) {
     logger.debug(`[GuildPlayer<${guild.id}>] Initialize`);
 
-    this.guild = guild;
     this.player = createAudioPlayer().on(
       AudioPlayerStatus.Idle,
       this.playNext as never,
@@ -100,7 +98,7 @@ export class GuildPlayer {
   private play = async (ainfo: TAudioInfo) => {
     logger.debug(`[GuildPlayer<${this.guildId}>] Play ("${ainfo.title}")`);
 
-    const stream = await AudioProvider.stream(ainfo.url);
+    const stream = await ytdl.stream(ainfo.url);
     const probeInfo = await demuxProbe(stream);
 
     if (ainfo.isLive) {

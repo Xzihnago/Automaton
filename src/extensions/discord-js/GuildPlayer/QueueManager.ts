@@ -1,16 +1,11 @@
-import { inspect } from "util";
 import type { Guild } from "discord.js";
 
 export class QueueManager {
-  public readonly guild: Guild;
-
   private _mode: QueueMode;
   public items: TAudioInfo[];
   public index: number | null;
 
-  constructor(guild: Guild) {
-    this.guild = guild;
-
+  constructor(public readonly guild: Guild) {
     this._mode = QueueMode.Off;
     this.items = [];
     this.index = null;
@@ -82,15 +77,13 @@ export class QueueManager {
   }
 
   public add = async (audios: TAudioInfo[] | TAudioInfo) => {
-    let detail;
-    if (Array.isArray(audios)) {
-      this.items.push(...audios);
-      detail = inspect(audios.map((audio) => audio.title));
-    } else {
-      this.items.push(audios);
-      detail = inspect([audios.title]);
-    }
-    logger.debug(`[QueueManager<${this.guildId}>] Add ${detail}`);
+    if (!Array.isArray(audios)) audios = [audios];
+
+    this.items.push(...audios);
+
+    logger.debug(
+      `[QueueManager<${this.guildId}>] Add ${audios.length} items\n${audios.map((audio) => audio.title).inspect()}`,
+    );
 
     await this.write();
   };
@@ -177,18 +170,18 @@ export class QueueManager {
     switch (this.mode) {
       case QueueMode.Off:
         if (this.isLast) return;
-        if (this.index) {
-          ++this.index;
-        } else {
+        if (this.index === null) {
           this.index = 0;
+        } else {
+          ++this.index;
         }
         break;
 
       case QueueMode.All:
-        if (this.index) {
-          this.index = (this.index + 1) % this.length;
-        } else {
+        if (this.index === null) {
           this.index = 0;
+        } else {
+          this.index = (this.index + 1) % this.length;
         }
         break;
 
