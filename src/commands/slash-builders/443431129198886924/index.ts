@@ -1,5 +1,3 @@
 import squad from "./squad";
 
-export default {
-  squad,
-};
+export default [squad];

@@ -7,13 +7,4 @@ import expression from "./expression";
 import ping from "./ping";
 import turntable from "./turntable";
 
-export default {
-  voice,
-  player,
-  panel,
-  play,
-
-  expression,
-  ping,
-  turntable,
-};
+export default [voice, player, panel, play, expression, ping, turntable];
