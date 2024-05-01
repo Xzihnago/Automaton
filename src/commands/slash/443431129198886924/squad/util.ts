@@ -46,7 +46,7 @@ export const setupSquad = async (message: Message, time: number) => {
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete squadCollectors[message.id];
 
-      logger.debug(`Clear group(${message.id}) from listening list`);
+      logger.debug(`Clear squad(${message.id}) from listening list`);
       squadCache.remove([message.channelId, message.id]);
       await JSON.write("configs/443431129198886924/squad.json", squadCache);
 
