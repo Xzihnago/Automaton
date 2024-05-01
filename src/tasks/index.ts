@@ -1,10 +1,3 @@
-import { scheduleJob } from "node-schedule";
+import guildMemberCount from "./guild-member-count";
 
-const tasks: TSchedule[] = [];
-
-for (const task of tasks) {
-  logger.info(
-    `[Task] Add schedule job -> name("${task.name}"), cron("${task.cron}")`,
-  );
-  scheduleJob(task.cron, task.callback);
-}
+export default [guildMemberCount];

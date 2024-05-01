@@ -1,5 +1,7 @@
 import { inspect } from "util";
 import { Events } from "discord.js";
+import { scheduleJob } from "node-schedule";
+import tasks from "@/tasks";
 import commands from "@/commands/slash";
 
 const ready: TClientEvents<Events.ClientReady> = {
@@ -12,17 +14,25 @@ const ready: TClientEvents<Events.ClientReady> = {
       logger.info(`[Client] Found guild -> Guild(${guild.id}, ${guild.name})`);
     });
 
-    void (await Object.entries(commands)
+    tasks.forEach((task) => {
+      logger.info(`[Task] Add Job(${task.name}, ${task.cron})`);
+      scheduleJob(task.cron, async () => {
+        logger.info(`[Task] Execute Job(${task.name})`);
+        await task.callback(client);
+      });
+    });
+
+    await Object.entries(commands)
       .filter(([, command]) => command.initialize)
       .map(([name, command]) => {
         logger.info(`[Client] Initialize command -> ${name}`);
         try {
           return command.initialize?.(client);
         } catch (error) {
-          logger.error(`[Client] Initialize command\n${inspect(error)}`);
+          logger.error(`[Client]\n${inspect(error)}`);
         }
       })
-      .awaitAll());
+      .awaitAll();
   },
 };
 
