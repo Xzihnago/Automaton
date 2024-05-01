@@ -24,9 +24,7 @@ const chatInputCommand: TChatInputCommand = async (interaction) => {
       await Promise.reject(new Error("Debug Test Error"));
 
     case "test-interaction-timeout":
-      await new Promise((r) => {
-        setTimeout(r, 3000);
-      });
+      await wait(3000);
       await interaction.tryReply("Debug: test interaction timeout handle");
       return;
 
