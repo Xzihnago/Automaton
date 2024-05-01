@@ -1,3 +1,4 @@
+import { inspect } from "util";
 import type { Guild } from "discord.js";
 
 export class QueueManager {
@@ -196,37 +197,35 @@ export class QueueManager {
   private readonly read = async () => {
     logger.debug(`[QueueManager<${this.guildId}>] Read config`);
 
-    try {
-      const data = await JSON.read<{
-        mode: QueueMode;
-        index: number | null;
-        items: TAudioInfo[];
-      }>(`configs/${this.guildId}/queue.json`);
-      if (!data) return;
+    await JSON.read<{
+      mode: QueueMode;
+      index: number | null;
+      items: TAudioInfo[];
+    }>(`configs/${this.guildId}/queue.json`)
+      .then((data) => {
+        if (!data) return;
 
-      this.mode = data.mode;
-      this.items = data.items;
-      this.index = data.index;
+        this.mode = data.mode;
+        this.items = data.items;
+        this.index = data.index;
 
-      if (this.index) --this.index;
-    } catch (error) {
-      logger.error(
-        `[QueueManager<${this.guildId}>]\n${(error as Error).stack}`,
-      );
-    }
+        if (this.index) --this.index;
+      })
+      .catch((error: unknown) => {
+        logger.error(`[QueueManager<${this.guildId}>]\n${inspect(error)}`);
+      });
   };
 
   private readonly write = async () => {
     logger.debug(`[QueueManager<${this.guildId}>] Write config`);
 
-    try {
-      const data = { mode: this.mode, index: this.index, items: this.items };
-      await JSON.write(`configs/${this.guildId}/queue.json`, data);
-    } catch (error) {
-      logger.error(
-        `[QueueManager<${this.guildId}>]\n${(error as Error).stack}`,
-      );
-    }
+    await JSON.write(`configs/${this.guildId}/queue.json`, {
+      mode: this.mode,
+      index: this.index,
+      items: this.items,
+    }).catch((error: unknown) => {
+      logger.error(`[QueueManager<${this.guildId}>]\n${inspect(error)}`);
+    });
   };
 }
 

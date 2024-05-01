@@ -21,8 +21,10 @@ String.prototype.toSeconds = function () {
     );
   }
 
-  const time = this.split(":");
-  return time.reduceRight((acc, cur, i) => acc + Number(cur) * timeScale[i], 0);
+  return this.split(":").reduceRight(
+    (acc, cur, i) => acc + Number(cur) * timeScale[i],
+    0,
+  );
 };
 
 const sChar =
